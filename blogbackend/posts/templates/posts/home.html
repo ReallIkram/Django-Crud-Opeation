@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django CRUD Blog</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family:Arial, Helvetica, sans-serif;
+            background:#f4f4f4;
+            padding:40px;
+        }
+
+        .container{
+            max-width:900px;
+            margin:auto;
+        }
+
+        h1{
+            margin-bottom:20px;
+            color:#333;
+        }
+
+        .top-bar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:25px;
+        }
+
+        .btn{
+            text-decoration:none;
+            background:#2563eb;
+            color:white;
+            padding:10px 18px;
+            border-radius:6px;
+            font-weight:bold;
+            display:inline-block;
+        }
+
+        .btn:hover{
+            background:#1d4ed8;
+        }
+
+        .post-card{
+            background:white;
+            border-radius:10px;
+            padding:20px;
+            margin-bottom:20px;
+            box-shadow:0 2px 8px rgba(0,0,0,.08);
+        }
+
+        .post-card h2{
+            margin-bottom:10px;
+            color:#111827;
+        }
+
+        .post-card p{
+            color:#555;
+            line-height:1.6;
+            margin-bottom:15px;
+        }
+
+        .post-footer{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-top:15px;
+        }
+
+        .date{
+            color:gray;
+            font-size:14px;
+        }
+
+        .actions{
+            display:flex;
+            gap:10px;
+            align-items:center;
+        }
+
+        .actions form{
+            margin:0;
+        }
+
+        .edit-btn,
+        .delete-btn{
+            border:none;
+            color:white;
+            padding:8px 15px;
+            border-radius:6px;
+            cursor:pointer;
+            font-size:14px;
+        }
+
+        .edit-btn{
+            background:#16a34a;
+        }
+
+        .edit-btn:hover{
+            background:#15803d;
+        }
+
+        .delete-btn{
+            background:#dc2626;
+        }
+
+        .delete-btn:hover{
+            background:#b91c1c;
+        }
+
+        .empty{
+            background:white;
+            padding:40px;
+            border-radius:10px;
+            text-align:center;
+            font-size:20px;
+            color:#666;
+            box-shadow:0 2px 8px rgba(0,0,0,.08);
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="top-bar">
+
+        <h1>📝 Django CRUD Blog</h1>
+
+        <a href="{% url 'create' %}" class="btn">
+            + Create New Post
+        </a>
+
+    </div>
+
+    {% if posts %}
+
+        {% for post in posts %}
+
+            <div class="post-card">
+
+                <h2>{{ post.title }}</h2>
+
+                <p>{{ post.content }}</p>
+
+                <div class="post-footer">
+
+                    <span class="date">
+                        Created: {{ post.created_at }}
+                    </span>
+
+                    <div class="actions">
+
+                        <a href="{% url 'update' post.id %}">
+                            <button type="button" class="edit-btn">
+                                Edit
+                            </button>
+                        </a>
+
+                        <form method="POST" action="{% url 'delete' post.id %}">
+
+                            {% csrf_token %}
+
+                            <button type="submit" class="delete-btn">
+                                Delete
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty">
+
+            <h2>No Posts Found</h2>
+
+            <br>
+
+            <p>Create your first post by clicking the button above.</p>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

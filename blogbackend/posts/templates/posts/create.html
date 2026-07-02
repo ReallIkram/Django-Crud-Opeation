@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>
+
+        {% if post %}
+
+            Update Post
+
+        {% else %}
+
+            Create Post
+
+        {% endif %}
+
+    </title>
+
+</head>
+
+<body>
+
+<h1>
+
+{% if post %}
+
+Update Post
+
+{% else %}
+
+Create Post
+
+{% endif %}
+
+</h1>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<label>
+
+Title
+
+</label>
+
+<br>
+
+<input
+type="text"
+name="title"
+value="{{ post.title|default:'' }}"
+required>
+
+<br><br>
+
+<label>
+
+Content
+
+</label>
+
+<br>
+
+<textarea
+name="content"
+rows="6"
+required>{{ post.content|default:'' }}</textarea>
+
+<br><br>
+
+<button type="submit">
+
+{% if post %}
+
+Update
+
+{% else %}
+
+Save Post
+
+{% endif %}
+
+</button>
+
+</form>
+
+</body>
+
+</html>

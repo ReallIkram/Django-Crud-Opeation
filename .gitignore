@@ -1,0 +1,100 @@
+# ============================
+# Python
+# ============================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Compiled extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+dist/
+downloads/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# ============================
+# Virtual Environment
+# ============================
+venv/
+env/
+ENV/
+.venv/
+
+# ============================
+# Django
+# ============================
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Media uploads (optional)
+media/
+
+# Static files collected by collectstatic
+staticfiles/
+
+# ============================
+# Environment Variables
+# ============================
+.env
+.env.*
+
+# ============================
+# PostgreSQL
+# ============================
+*.sql
+*.dump
+
+# ============================
+# IDE
+# ============================
+.vscode/
+.idea/
+
+# ============================
+# OS Files
+# ============================
+.DS_Store
+Thumbs.db
+
+# ============================
+# Pytest / Coverage
+# ============================
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+.cache/
+
+# ============================
+# Type Checkers
+# ============================
+.mypy_cache/
+.pyre/
+.pytype/
+
+# ============================
+# Jupyter
+# ============================
+.ipynb_checkpoints/
+
+# ============================
+# Misc
+# ============================
+*.bak
+*.swp
+*.swo
