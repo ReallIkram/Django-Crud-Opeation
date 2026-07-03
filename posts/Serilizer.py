@@ -3,13 +3,25 @@ from .models import Post
 
 
 class PostSerializer(serializers.ModelSerializer):
-    image = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
         fields = "__all__"
 
-    def get_image(self, obj):
-        if obj.image:
-            return obj.image.url
-        return None
+    def to_representation(self, instance):
+
+        data = super().to_representation(instance)
+
+        if instance.image:
+
+            url = instance.image.url
+
+            if url.startswith("http://"):
+                url = url.replace("http://", "https://", 1)
+
+            data["image"] = url
+
+        else:
+            data["image"] = None
+
+        return data

@@ -10,24 +10,28 @@ from .Serilizer import PostSerializer
 def posts(request):
 
     if request.method == "GET":
+
         serializer = PostSerializer(
             Post.objects.all(),
-            many=True,
-            context={"request": request},
+            many=True
         )
+
         return Response(serializer.data)
 
     serializer = PostSerializer(
-        data=request.data,
-        context={"request": request},
+        data=request.data
     )
 
     if serializer.is_valid():
+
         serializer.save()
+
         return Response(
             serializer.data,
             status=status.HTTP_201_CREATED,
         )
+
+    print(serializer.errors)
 
     return Response(
         serializer.errors,
@@ -39,19 +43,20 @@ def posts(request):
 def post_detail(request, pk):
 
     try:
+
         post = Post.objects.get(pk=pk)
 
     except Post.DoesNotExist:
+
         return Response(
             {"error": "Post not found"},
             status=status.HTTP_404_NOT_FOUND,
         )
 
     if request.method == "GET":
-        serializer = PostSerializer(
-            post,
-            context={"request": request},
-        )
+
+        serializer = PostSerializer(post)
+
         return Response(serializer.data)
 
     if request.method == "PUT":
@@ -60,12 +65,15 @@ def post_detail(request, pk):
             post,
             data=request.data,
             partial=True,
-            context={"request": request},
         )
 
         if serializer.is_valid():
+
             serializer.save()
+
             return Response(serializer.data)
+
+        print(serializer.errors)
 
         return Response(
             serializer.errors,
@@ -75,5 +83,5 @@ def post_detail(request, pk):
     post.delete()
 
     return Response(
-        status=status.HTTP_204_NO_CONTENT,
+        status=status.HTTP_204_NO_CONTENT
     )
