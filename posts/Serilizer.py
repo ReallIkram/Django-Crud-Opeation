@@ -3,9 +3,6 @@ from .models import Post
 
 
 class PostSerializer(serializers.ModelSerializer):
-
-    image = serializers.ImageField(required=False)
-
     class Meta:
         model = Post
         fields = "__all__"
