@@ -29,6 +29,9 @@ ALLOWED_HOSTS = [
 # Applications
 
 INSTALLED_APPS = [
+
+    "corsheaders",
+    'rest_framework',
     "posts",
 
     "django.contrib.admin",
@@ -43,6 +46,12 @@ INSTALLED_APPS = [
 # Middleware
 
 MIDDLEWARE = [
+
+
+    "corsheaders.middleware.CorsMiddleware",
+
+
+
     "django.middleware.security.SecurityMiddleware",
 
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -130,5 +139,20 @@ STATICFILES_STORAGE = (
     "whitenoise.storage.CompressedManifestStaticFilesStorage"
 )
 
+#Cors Allowed Origin 
+CORS_ALLOWED_ORIGINS = [
 
+    "http://localhost:5173",
+    
+
+]
+
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    ".onrender.com",
+]
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

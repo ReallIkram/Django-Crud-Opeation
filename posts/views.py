@@ -1,60 +1,101 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+
 from .models import Post
+from .Serilizer import PostSerializer
 
 
-def home(request):
+@api_view(["GET", "POST"])
+def posts(request):
 
-    posts = Post.objects.all().order_by("-created_at")
+    if request.method == "GET":
 
-    context = {
-        "posts": posts
-    }
+        posts = Post.objects.all().order_by("-created_at")
 
-    return render(request, "posts/home.html", context)
-
-
-def create_post(request):
-
-    if request.method == "POST":
-
-        Post.objects.create(
-            title=request.POST.get("title"),
-            content=request.POST.get("content")
+        serializer = PostSerializer(
+            posts,
+            many=True,
+            context={"request": request},
         )
 
-        return redirect("home")
+        return Response(serializer.data)
 
-    return render(request, "posts/create.html")
+    serializer = PostSerializer(
+        data=request.data,
+        context={"request": request},
+    )
 
+    if serializer.is_valid():
 
-def update_post(request, id):
+        serializer.save()
 
-    post = get_object_or_404(Post, id=id)
+        return Response(
+            serializer.data,
+            status=status.HTTP_201_CREATED,
+        )
 
-    if request.method == "POST":
-
-        post.title = request.POST.get("title")
-        post.content = request.POST.get("content")
-
-        post.save()
-
-        return redirect("home")
-
-    context = {
-        "post": post
-    }
-
-    return render(request, "posts/create.html", context)
+    return Response(
+        serializer.errors,
+        status=status.HTTP_400_BAD_REQUEST,
+    )
 
 
-def delete_post(request, id):
+@api_view(["GET", "PUT", "DELETE"])
+def post_detail(request, pk):
 
-    post = get_object_or_404(Post, id=id)
+    try:
+        post = Post.objects.get(pk=pk)
 
-    if request.method == "POST":
+    except Post.DoesNotExist:
 
-        post.delete()
+        return Response(
+            {"error": "Post not found"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
 
-        return redirect("home")
+    if request.method == "GET":
 
-    return render(request, "posts/delete.html", {"post": post})
+        serializer = PostSerializer(
+            post,
+            context={"request": request},
+        )
+
+        return Response(serializer.data)
+
+    if request.method == "PUT":
+
+        old_image = post.image
+
+        serializer = PostSerializer(
+            post,
+            data=request.data,
+            partial=True,
+            context={"request": request},
+        )
+
+        if serializer.is_valid():
+
+            serializer.save()
+
+            # Delete previous image if replaced
+            if (
+                old_image
+                and request.FILES.get("image")
+                and old_image.path != post.image.path
+            ):
+                import os
+
+                if os.path.isfile(old_image.path):
+                    os.remove(old_image.path)
+
+            return Response(serializer.data)
+
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    post.delete()
+
+    return Response(status=status.HTTP_204_NO_CONTENT)
