@@ -143,7 +143,9 @@ STATICFILES_STORAGE = (
 CORS_ALLOWED_ORIGINS = [
 
     "http://localhost:5173",
+    "https://blogging-site-two-iota.vercel.app",
     
+
 
 ]
 
